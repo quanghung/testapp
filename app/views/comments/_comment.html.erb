@@ -1,0 +1,10 @@
+<li>
+  <span class="content">
+  	<%= gravatar_for User.find((Comment.find(params[:id]).user_id_cmt)) %>
+    <%= link_to User.find((Comment.find(params[:id]).user_id_cmt)).name %> 
+  	<%= comment.content %>
+  </span>
+  <span class="timestamp">
+    <i>Commented <%= comment.created_at%> ago.</i>
+  </span>
+</li>

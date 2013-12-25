@@ -1,0 +1,39 @@
+<li>
+  <span class="title">
+    <span><b><%= entry.title %></b></span>
+  </span>
+  <span class="body"><%= entry.body %></span>
+  <span class="timestamp">
+    Posted <%= entry.created_at %> ago.
+  </span>
+  <% if current_user?(entry.user) %>
+    <%= link_to "delete", entry, method: :delete,
+                                     data: { confirm: "You sure?" },
+                                     title: entry.title,
+                                     body: entry.body %>
+  <% end %>
+
+  <% if entry.comments.any? %>
+    <h4>Comments (<%= entry.comments.count %>)</h4>
+    <% @cmts = entry.comments.paginate(:page => params[:comment_page], :per_page => 5)%>
+    <li class="entries">
+            <% @cmts.each do |i|%>
+              <li>
+                <span class="content">
+                  <b><%= User.find(i.user_id_cmt).name %></b>
+                  <i><%= i.content %></i>
+                </span>
+                <span class="timestamp">
+                  <i>Commented <%= i.created_at %> ago.</i>
+                </span>
+              </li>
+            <%end %>
+            <%= will_paginate @cmts, :param_name => 'comment_page'%>
+    </li>
+  <% end %>
+  <% if signed_in? %>
+    <%= render 'shared/comment_form',entry: entry%>
+  <%end%>
+</li>
+
+
